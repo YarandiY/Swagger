@@ -2,7 +2,7 @@ import groovy.yaml.YamlSlurper
 import groovy.json.JsonOutput;
 
 
-class GroovyTest{
+class Main{
     static void main(args){
         yamlFile.withReader { reader ->
             def yaml = new YamlSlurper().parse(reader)
@@ -14,7 +14,10 @@ class GroovyTest{
                 println(model.getKey() + " : ")
                 println("\t type : "  + model.getValue().type)
                 println("\t required : "  + model.getValue().required)
-                println("\t properties : "  + model.getValue().properties)
+                println("\t properties : " )
+                for (propertie in model.getValue().properties){
+                    println("\t \t " + propertie)
+                }
                 println("\t xml : "  + model.getValue().xml)
             }
 
