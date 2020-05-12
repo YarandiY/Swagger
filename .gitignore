@@ -2,5 +2,5 @@
 *.iws
 *.iml
 *.ipr
-src/test.yml
+*.yml
 out/
