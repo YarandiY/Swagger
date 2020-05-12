@@ -12,23 +12,29 @@ class DefinitionsGenerator {
         models = yamlFile.definitions
     }
 
-    void generate(){
+    private void removeTables(){
         sql.execute("DROP TABLE IF EXISTS PROPERTY;")
         sql.execute("DROP TABLE IF EXISTS MODEL;")
+    }
+
+    private void createTables(){
         sql.execute "create table MODEL (model_id serial NOT NULL," +
                 " name VARCHAR (100), type VARCHAR (100)," +
                 " required VARCHAR (100), xml VARCHAR (100)," +
-                "CONSTRAINT PK_model PRIMARY KEY ( model_id))"
+                " CONSTRAINT PK_model PRIMARY KEY ( model_id))"
         sql.execute "create table PROPERTY (property_id serial NOT NULL," +
                 " name VARCHAR (100), type VARCHAR (100)," +
-                "CONSTRAINT PK_property PRIMARY KEY ( property_id)," +
+                " CONSTRAINT PK_property PRIMARY KEY ( property_id)," +
                 " CONSTRAINT FK_21 FOREIGN KEY ( model_id) REFERENCES model ( model_id), model_id integer NOT NULL, " +
                 " description VARCHAR (200), enum VARCHAR (100)," +
                 " items VARCHAR (100)," +
                 " ref VARCHAR (100)," +
                 " format VARCHAR (100), xml VARCHAR (100))"
+    }
 
-
+    void generate(){
+        removeTables()
+        createTables()
         for (model in models) {
             println(model.key + " :")
             sql.executeInsert (" INSERT INTO MODEL ( name, type, required, xml)" +
