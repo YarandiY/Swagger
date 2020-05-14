@@ -6,9 +6,10 @@ class Main{
         def yamlFile = new File("test.yml")
         yamlFile.withReader { reader ->
             LazyMap yaml = new YamlSlurper().parse(reader) as LazyMap
-            DefinitionsGenerator definitions = new DefinitionsGenerator(yaml, DbConfig.sql)
-            definitions.generate()
+//            DefinitionsGenerator definitionsGenerator = new DefinitionsGenerator(yaml, DbConfig.sql)
+//            definitionsGenerator.generate()
+            PathsGenerator pathsGenerator = new PathsGenerator(yaml, DbConfig.sql)
+            pathsGenerator.generate()
         }
     }
-
 }

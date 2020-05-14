@@ -1,10 +1,10 @@
 import groovy.sql.Sql
 import  org.apache.groovy.json.internal.LazyMap
 
-class DefinitionsGenerator {
-    private  LazyMap yamlFile;
-    private  LazyMap models;
-    private  Sql sql;
+class DefinitionsGenerator{
+    private  LazyMap models
+    LazyMap yamlFile
+    Sql sql
 
     DefinitionsGenerator(LazyMap yamlFile, Sql sql){
         this.yamlFile = yamlFile
@@ -36,15 +36,12 @@ class DefinitionsGenerator {
         removeTables()
         createTables()
         for (model in models) {
-            println(model.key + " :")
             sql.executeInsert (" INSERT INTO MODEL ( name, type, required, xml)" +
                     " VALUES (?,?,?,?) " , [model.key, model.getValue().type,
                                             model.getValue().required.toString(),
-                                            model.getValue().xml.toString()]);
+                                            model.getValue().xml.toString()])
             def model_id = sql.rows("select model_id from model where name=\'" + model.key + "\'").get(0).get("model_id")
-            println("\t properties : " )
             for (property in model.getValue().properties){
-                println("\t \t " + property)
                 sql.executeInsert (" INSERT INTO PROPERTY ( name, type, model_id, description," +
                         " enum, items, ref, format, xml) VALUES (?, ?, ? ,? , ?, ?, ?, ?, ?) " ,
                         [property.key.toString(), property.getValue().type, model_id,
